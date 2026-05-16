@@ -1,0 +1,33 @@
+#!/usr/bin/env sh
+##############################################################################
+##
+##  Gradle start up script for UN*X
+##
+##############################################################################
+
+set -e
+
+# Determine the location of the script
+PRG="\$0"
+while [ -h "$PRG" ] ; do
+  ls=$(ls -ld "$PRG")
+  link=$(expr "$ls" : '.*-> \(.*\)$')
+  if expr "$link" : '/.*' > /dev/null; then
+    PRG="$link"
+  else
+    PRG="$(dirname "$PRG")/$link"
+  fi
+  done
+
+SAVED="$(pwd)"
+cd "$(dirname "$PRG")/.."
+APP_HOME="$(pwd)"
+cd "$SAVED"
+
+DEFAULT_JVM_OPTS=""
+GRADLE_USER_HOME="${GRADLE_USER_HOME:-"$HOME/.gradle"}"
+GRADLE_OPTS="${GRADLE_OPTS:-}"
+JAVA_HOME="${JAVA_HOME:-}"
+
+CLASSPATH="$APP_HOME/gradle/wrapper/gradle-wrapper.jar"
+exec "$JAVA_HOME/bin/java" $DEFAULT_JVM_OPTS $GRADLE_OPTS -classpath "$CLASSPATH" org.gradle.wrapper.GradleWrapperMain "$@"
