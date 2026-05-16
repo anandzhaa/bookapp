@@ -1,0 +1,36 @@
+# Gradle
+.gradle/
+build/
+**/build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Android
+*.apk
+*.ap_
+*.aab
+*.dex
+local.properties
+.cxx/
+captures/
+.externalNativeBuild/
+
+# IDE
+.idea/
+*.iml
+.DS_Store
+*.swp
+*.swo
+
+# Kotlin
+.kotlin/
+
+# Logs
+*.log
+build-log.txt
+
+# OS
+Thumbs.db
+
+# Keep release APK in repo for assignment submission
+!releases/
+!releases/*.apk

@@ -1,7 +1,6 @@
 package com.bookapp.shared.presentation.booklist
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import com.bookapp.shared.presentation.AppViewModel
 import com.bookapp.shared.domain.model.Book
 import com.bookapp.shared.domain.model.Resource
 import com.bookapp.shared.domain.usecase.DeleteBookUseCase
@@ -38,7 +37,7 @@ class BookListViewModel(
     private val getBooksUseCase: GetBooksUseCase,
     private val deleteBookUseCase: DeleteBookUseCase,
     private val refreshBooksUseCase: RefreshBooksUseCase
-) : ViewModel() {
+) : AppViewModel() {
 
     private val _state = MutableStateFlow(BookListState())
     val state: StateFlow<BookListState> = _state.asStateFlow()
@@ -67,7 +66,7 @@ class BookListViewModel(
                     }
                 }
             }
-            .launchIn(viewModelScope)
+            .launchIn(scope)
     }
 
     fun onEvent(event: BookListEvent) {
@@ -80,7 +79,7 @@ class BookListViewModel(
     }
 
     private fun refresh() {
-        viewModelScope.launch {
+        scope.launch {
             _state.update { it.copy(isRefreshing = true) }
             val result = refreshBooksUseCase()
             if (result is Resource.Error) {
@@ -92,7 +91,7 @@ class BookListViewModel(
     }
 
     private fun deleteBook(id: Int) {
-        viewModelScope.launch {
+        scope.launch {
             val result = deleteBookUseCase(id)
             if (result is Resource.Error) {
                 _state.update { it.copy(error = result.message) }

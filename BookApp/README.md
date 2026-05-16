@@ -1,176 +1,173 @@
-# 📚 BookShelf — KMP Book Management App
+# BookShelf — KMP Book Management App
 
-A Kotlin Multiplatform (KMP) + Compose Multiplatform application for browsing, adding, and managing books via the FakeRestAPI. Built with Clean Architecture, offline-first support, and a polished UI.
+A **Kotlin Multiplatform (KMP)** + **Compose Multiplatform** app for browsing, adding, and managing books via the [FakeRestAPI](https://fakerestapi.azurewebsites.net). Built with **Clean Architecture**, **offline-first** caching, and a polished Material 3 UI.
+
+**Repository:** https://github.com/anandzhaa/bookapp
 
 ---
 
-## ✨ Features
+## Features
 
 | Feature | Status |
-|---|---|
-| Splash Screen | ✅ |
-| List Books | ✅ |
-| Add Book | ✅ |
-| Book Detail Screen | ✅ |
-| Delete Book | ✅ |
-| Dark Mode | ✅ Bonus (toggle available in App Bar) |
-| Pull to Refresh | ✅ Bonus |
-| Search / Filter | ✅ Bonus |
-| Swipe to Delete | ✅ Bonus |
-| Offline-First | ✅ Bonus |
-| Unit Tests | ✅ Bonus |
+|---------|--------|
+| Splash Screen | Done |
+| List Books (GET) | Done |
+| Add Book (POST) | Done |
+| Book Detail (GET by id) | Done |
+| Delete Book (DELETE) | Done |
+| Dark Mode | Bonus |
+| Pull to Refresh | Bonus |
+| Search / Filter | Bonus |
+| Swipe to Delete | Bonus |
+| Offline-First | Bonus |
+| Unit Tests | Bonus |
 
 ---
 
-## 🛠 Tech Stack
+## Tech stack
 
 | Layer | Technology |
-|---|---|
-| Language | Kotlin Multiplatform (KMP) |
+|-------|------------|
+| Language | Kotlin Multiplatform |
 | UI | Compose Multiplatform |
 | Networking | Ktor Client |
 | Local DB | SQLDelight |
-| Preferences | DataStore Preferences |
+| Preferences | DataStore |
 | DI | Koin |
-| Async | Kotlin Coroutines + StateFlow |
-| Navigation | Jetpack Navigation Compose (Multiplatform) |
-| Testing | kotlin-test + coroutines-test |
+| Async | Coroutines + StateFlow |
+| Navigation | Navigation Compose (Multiplatform) |
+| Testing | kotlin-test, coroutines-test |
 
 ---
 
-## 🏗 Architecture
+## Architecture
 
-The project follows Clean Architecture with a strict separation of concerns:
+Data flow follows the assignment pattern:
 
 ```
 UI (Composables)
     ↓
 ViewModel  (StateFlow, events)
     ↓
-UseCase    (business rules, validation)
+UseCase    (validation, business rules)
     ↓
-Repository (interface — single source of truth)
+Repository (interface)
     ↓
-  ┌──────────────┐
-  │  Remote API  │  ←── Ktor (BookApiService)
-  │  Local DB    │  ←── SQLDelight (BookLocalDataSource)
-  └──────────────┘
+  Remote API (Ktor)  +  Local DB (SQLDelight)
 ```
 
-**Offline-first strategy:** `getBooks()` emits local cached data immediately via a Flow, then kicks off a background network sync. The UI updates automatically when new data arrives.
+**Offline-first:** `getBooks()` emits the SQLDelight cache immediately, then syncs from the network in the background.
 
 ---
 
-## 📁 Folder Structure
+## Folder structure
 
 ```
 BookApp/
-├── shared/                          # KMP shared module
+├── shared/
 │   └── src/commonMain/kotlin/com/bookapp/shared/
-│       ├── data/
-│       │   ├── local/               # SQLDelight data source + driver factories
-│       │   ├── preferences/         # DataStore (dark mode, first-launch)
-│       │   ├── remote/              # Ktor API service + DTOs
-│       │   └── repository/          # BookRepositoryImpl (offline-first)
-│       ├── domain/
-│       │   ├── model/               # Book, Resource<T>
-│       │   ├── repository/          # BookRepository interface
-│       │   └── usecase/             # GetBooks, AddBook, DeleteBook, etc.
-│       ├── presentation/
-│       │   ├── booklist/            # BookListViewModel + State + Events
-│       │   ├── addbook/             # AddBookViewModel + State + Events
-│       │   └── bookdetail/          # BookDetailViewModel + State + Events
-│       └── di/                      # Koin modules
-│
-├── composeApp/                      # Compose UI module (Android + iOS)
-│   └── src/commonMain/kotlin/com/bookapp/
-│       └── ui/
-│           ├── App.kt               # Root composable, dark mode wiring
-│           ├── navigation/          # NavGraph + Screen routes
-│           ├── screens/
-│           │   ├── splash/
-│           │   ├── booklist/        # List + search + swipe-to-delete
-│           │   ├── addbook/
-│           │   └── bookdetail/
-│           └── theme/               # MaterialTheme, light/dark color schemes
-└── gradle/
-    └── libs.versions.toml           # Version catalog
+│       ├── data/          # remote, local, preferences, repository
+│       ├── domain/        # models, repository interface, use cases
+│       ├── presentation/  # ViewModels (shared across platforms)
+│       └── di/            # Koin modules
+├── composeApp/
+│   └── src/commonMain/kotlin/com/bookapp/ui/
+│       ├── navigation/
+│       ├── screens/       # splash, booklist, addbook, bookdetail
+│       └── theme/
+└── releases/              # submission APK
 ```
+
+Platform-specific code: `shared/src/androidMain`, `shared/src/iosMain`.
 
 ---
 
-## 🚀 Getting Started
+## Getting started
 
 ### Prerequisites
 
-- Android Studio Hedgehog or newer
-- JDK 17
-- Xcode 15+ (for iOS)
+- Android Studio Hedgehog or newer (or JDK 17+ and Android SDK)
+- Android SDK API 35, min SDK 24
 
-### Clone & Run
+### Clone and run
 
 ```bash
-git clone https://github.com/BookApp.git
-cd BookApp
+git clone https://github.com/anandzhaa/bookapp.git
+cd bookapp/BookApp
 
-# Android
-./gradlew :composeApp:installDebug
+# Build debug APK
+gradlew.bat :composeApp:assembleDebug    # Windows
+./gradlew :composeApp:assembleDebug      # macOS / Linux
 
-# iOS — open in Xcode
-open composeApp/iosApp.xcworkspace
+# Install on device/emulator
+gradlew.bat :composeApp:installDebug
 ```
 
-### Run Tests
+### Pre-built APK (submission)
+
+Install without building:
+
+```
+BookApp/releases/BookShelf-debug.apk
+```
+
+### Run tests
 
 ```bash
-./gradlew :shared:cleanAllTests :shared:allTests
+gradlew.bat :shared:cleanAllTests :shared:allTests
 ```
 
 ---
 
-## 🌐 API
+## API
 
-Base URL: `https://fakerestapi.azurewebsites.net`
+**Base URL:** `https://fakerestapi.azurewebsites.net`
 
 | Method | Endpoint | Description |
-|---|---|---|
+|--------|----------|-------------|
 | GET | `/api/v1/Books` | Fetch all books |
 | POST | `/api/v1/Books` | Create a book |
 | GET | `/api/v1/Books/{id}` | Get book by ID |
 | DELETE | `/api/v1/Books/{id}` | Delete a book |
 
-> **Note:** The FakeRestAPI is a mock service. POST and DELETE calls return success responses but do not persist data server-side. The app handles this via optimistic local caching in SQLDelight.
+**Book JSON fields:** `id`, `title`, `description`, `pageCount`, `excerpt`, `publishDate` (ISO 8601).
+
+> The FakeRestAPI does not persist POST/DELETE on the server. The app uses SQLDelight for optimistic local storage so add/delete feel correct offline and across sessions.
 
 ---
 
-## 📸 Screenshots
+## Screenshots
 
-> Add screenshots or a screen recording link here.
+| Splash | Book list | Add book | Detail |
+|--------|-----------|----------|--------|
+| Animated splash with app branding | List with search, pull-to-refresh, swipe-delete | Form with validation | Full book info + delete |
 
----
-
-## 🧪 Testing
-
-Unit tests cover:
-
-- `AddBookUseCase` — input validation (blank title, invalid page count)
-- `DeleteBookUseCase` — success and failure paths
-- `BookListViewModel` — state emission, search filtering
-
-All tests use a `FakeBookRepository` and `StandardTestDispatcher` to keep tests fast and deterministic.
+Run the app or install `releases/BookShelf-debug.apk` to see all screens. A screen recording can be attached to the GitHub release or README if required by your evaluator.
 
 ---
 
-## 💡 Design Decisions
+## Testing
 
-- **SQLDelight over Room** — better KMP support; generates type-safe queries from `.sq` files.
-- **Offline-first Flow** — `getBooks()` combines the local DB stream with a background sync so the list is always snappy, even without internet.
-- **Sealed `Resource<T>`** — a simple, idiomatic way to express Loading / Success / Error across the whole stack.
-- **Koin over Hilt** — Koin works identically on both platforms with no annotation processing.
-- **Single-module ViewModels** — all ViewModels live in `shared` so logic is 100% reusable on iOS.
+Unit tests in `shared/src/commonTest`:
+
+- `AddBookUseCase` — blank title, invalid page count, success path
+- `DeleteBookUseCase` — success and failure
+- `BookListViewModel` — load, search filter, empty search
+
+Uses `FakeBookRepository` and `StandardTestDispatcher`.
 
 ---
 
-## 👤 Author
+## Design decisions
 
-Built for the KMP Internship Technical Assignment.
+- **SQLDelight** — strong KMP support, type-safe `.sq` queries
+- **Offline-first Flow** — local DB stream + background network sync
+- **`Resource<T>`** — Loading / Success / Error across layers
+- **Koin** — multiplatform DI without annotation processors
+- **ViewModels in `shared`** — business logic reusable on iOS framework consumers
+
+---
+
+## Author
+
+Built for the **KMP Internship Technical Assignment**.

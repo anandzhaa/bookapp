@@ -1,7 +1,6 @@
 package com.bookapp.shared.presentation.addbook
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import com.bookapp.shared.presentation.AppViewModel
 import com.bookapp.shared.domain.model.Resource
 import com.bookapp.shared.domain.usecase.AddBookUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -33,7 +32,7 @@ sealed interface AddBookEvent {
     data object DismissError : AddBookEvent
 }
 
-class AddBookViewModel(private val addBookUseCase: AddBookUseCase) : ViewModel() {
+class AddBookViewModel(private val addBookUseCase: AddBookUseCase) : AppViewModel() {
 
     private val _state = MutableStateFlow(AddBookState())
     val state: StateFlow<AddBookState> = _state.asStateFlow()
@@ -74,7 +73,7 @@ class AddBookViewModel(private val addBookUseCase: AddBookUseCase) : ViewModel()
 
         if (hasErrors) return
 
-        viewModelScope.launch {
+        scope.launch {
             _state.update { it.copy(isLoading = true, error = null) }
 
             val result = addBookUseCase(

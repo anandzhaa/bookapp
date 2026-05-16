@@ -1,6 +1,7 @@
 package com.bookapp.ui
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
@@ -15,6 +16,10 @@ fun App() {
     val prefs: AppPreferences = koinInject()
     val isDarkMode by prefs.isDarkMode.collectAsState(initial = false)
     val coroutineScope = rememberCoroutineScope()
+
+    LaunchedEffect(Unit) {
+        prefs.markLaunched()
+    }
 
     BookAppTheme(darkTheme = isDarkMode) {
         BookNavGraph(

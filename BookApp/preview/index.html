@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>BookShelf Preview</title>
+<style>
+body{font-family:system-ui;background:#1a1a2e;color:#eee;padding:24px}
+h1{text-align:center;color:#d0bcff}
+.phones{display:flex;flex-wrap:wrap;gap:20px;justify-content:center;margin-top:20px}
+.phone{width:260px;background:#2d2d44;border-radius:20px;padding:10px}
+.screen{background:#fef7ff;color:#222;border-radius:14px;min-height:420px;padding:0;overflow:hidden}
+.bar{background:#e8def8;padding:10px;font-weight:700;color:#6750a4}
+.content{padding:10px}
+.card{background:#fff;border-radius:10px;padding:10px;margin:8px 0;font-size:13px}
+.caption{text-align:center;font-size:11px;color:#999;margin-top:6px}
+.splash{display:flex;flex-direction:column;align-items:center;justify-content:center;height:420px;background:linear-gradient(#e8def8,#fef7ff)}
+</style>
+</head>
+<body>
+<h1>BookShelf App Preview</h1>
+<p style="text-align:center;color:#888">Install: BookApp/releases/BookShelf-debug.apk</p>
+<div class="phones">
+<div class="phone"><div class="screen"><div class="splash"><div style="font-size:56px">📖</div><h2 style="color:#6750a4">BookShelf</h2></div></div><p class="caption">Splash</p></div>
+<div class="phone"><div class="screen"><div class="bar">BookShelf 🌙</div><div class="content"><div class="card"><b>Clean Code</b><br/><small>431 pages</small></div><div class="card"><b>Pragmatic Programmer</b></div></div></div><p class="caption">Book List</p></div>
+<div class="phone"><div class="screen"><div class="bar">Add Book</div><div class="content"><div class="card">Title, Description, Save</div></div></div><p class="caption">Add Book</p></div>
+<div class="phone"><div class="screen"><div class="bar">Detail 🗑</div><div class="content"><div class="card"><b>Clean Code</b><br/>Full description & dates</div></div></div><p class="caption">Detail + Delete</p></div>
+</div>
+</body>
+</html>

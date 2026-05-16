@@ -50,7 +50,6 @@ kotlin {
             // DataStore
             implementation(libs.datastore.preferences)
 
-            // Lifecycle ViewModel
             implementation(libs.lifecycle.viewmodel)
         }
 
@@ -58,6 +57,7 @@ kotlin {
             implementation(libs.ktor.client.android)
             implementation(libs.sqldelight.android.driver)
             implementation(libs.kotlinx.coroutines.android)
+            implementation(libs.datastore.preferences.android)
         }
 
         iosMain.dependencies {
